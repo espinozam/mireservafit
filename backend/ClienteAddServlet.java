@@ -35,7 +35,7 @@ public class ClienteAddServlet extends HttpServlet {
         }
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "INSERT INTO cliente (nombre, email) VALUES (?, ?)";
+            String sql = "INSERT INTO cliente (nombre, email, gimnasio_id) VALUES (?, ?, 1)";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, nombre);
                 stmt.setString(2, email);
