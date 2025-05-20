@@ -52,3 +52,4 @@ CREATE TABLE reserva (
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+ALTER TABLE reserva MODIFY duracion INT DEFAULT 60;
