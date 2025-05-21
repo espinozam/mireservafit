@@ -46,6 +46,20 @@ public class ReservaAddServlet extends HttpServlet {
 		}
 
 		try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+			// Comprobar solapamiento
+			String checkSql = "SELECT COUNT(*) FROM reserva WHERE fecha = ? AND hora = ? AND entrenador_id = ?";
+			try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+				checkStmt.setString(1, fecha);
+				checkStmt.setString(2, hora);
+				checkStmt.setInt(3, entrenadorId);
+
+				ResultSet rs = checkStmt.executeQuery();
+				if (rs.next() && rs.getInt(1) > 0) {
+					response.getWriter().println("Ya existe una reserva para ese entrenador en esa fecha y hora.");
+					return;
+				}
+			}
+
 			String sql = "INSERT INTO reserva (fecha, hora, cliente_id, entrenador_id) VALUES (?, ?, ?, ?)";
 
 			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
