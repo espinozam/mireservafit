@@ -46,20 +46,28 @@ public class ReservaAddServlet extends HttpServlet {
 		}
 
 		try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-			// Comprobar solapamiento
-			String checkSql = "SELECT COUNT(*) FROM reserva WHERE fecha = ? AND hora = ? AND entrenador_id = ?";
+			// Comprobar solapamiento de reservas:
+			// Esta consulta verifica si ya existe una reserva para el mismo entrenador,
+			// en la misma fecha, y en el rango de 59 minutos antes y después de la hora solicitada.
+			// Así se evita que dos reservas se crucen, considerando que cada sesión dura 60 minutos.
+			String checkSql = "SELECT COUNT(*) FROM reserva WHERE fecha = ? AND entrenador_id = ? " +
+							  "AND hora BETWEEN DATE_SUB(STR_TO_DATE(?, '%H:%i'), INTERVAL 59 MINUTE) " +
+							  "AND DATE_ADD(STR_TO_DATE(?, '%H:%i'), INTERVAL 59 MINUTE)";
 			try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
 				checkStmt.setString(1, fecha);
-				checkStmt.setString(2, hora);
-				checkStmt.setInt(3, entrenadorId);
+				checkStmt.setInt(2, entrenadorId);
+				checkStmt.setString(3, hora);
+				checkStmt.setString(4, hora);
 
 				ResultSet rs = checkStmt.executeQuery();
 				if (rs.next() && rs.getInt(1) > 0) {
-					response.getWriter().println("Ya existe una reserva para ese entrenador en esa fecha y hora.");
+					// Si hay al menos una reserva en ese rango, se informa al usuario y no se guarda la nueva reserva.
+					response.getWriter().println("Ya existe una reserva para ese entrenador en esa fecha y hora o en una hora adyacente.");
 					return;
 				}
 			}
 
+			// Si no hay solapamiento, se inserta la nueva reserva normalmente.
 			String sql = "INSERT INTO reserva (fecha, hora, cliente_id, entrenador_id) VALUES (?, ?, ?, ?)";
 
 			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -67,7 +75,7 @@ public class ReservaAddServlet extends HttpServlet {
 				stmt.setString(2, hora);
 				stmt.setInt(3, clienteId);
 				stmt.setInt(4, entrenadorId);
-				
+
 				int filas = stmt.executeUpdate();
 
 				PrintWriter out = response.getWriter();
