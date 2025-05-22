@@ -26,6 +26,22 @@
   <div id="listaClientes"></div>
   
   <script src="js/cliente.js"></script>
+
+  <h1>Gestión de Entrenadores</h1>
+
+  <!-- Formulario oculto para agregar entrenador -->
+  <form id="formEntrenador" style="display:none;" onsubmit="agregarEntrenador(event)">
+    <input type="text" name="nombre" placeholder="Nombre" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <button type="submit">Agregar Entrenador</button>
+  </form>
+
+  <!-- Formulario para editar entrenador -->
+<form id="formEditarEntrenador" style="display:none;" onsubmit="editarEntrenador(event)">
+  <input type="hidden" name="id" id="editarIdEntrenador" />
+  <input type="text" name="nombre" id="editarNombreEntrenador" placeholder="Nombre" required />
+  <input type="email" name="email" id="editarEmailEntrenador" placeholder="Email" required />
+  <button type="submit">Guardar Cambios</button>
     
 </body>
 </html>
