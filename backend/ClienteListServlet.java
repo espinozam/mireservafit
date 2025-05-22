@@ -47,7 +47,7 @@ public class ClienteListServlet extends HttpServlet {
                     out.println("<td>" + nombre + "</td>");
                     out.println("<td>" + email + "</td>");
                     out.println("<td>");
-                    out.println("<button onclick='editarCliente(" + id + ")'>Editar</button>");
+                    out.println("<button onclick='editarCliente(" + id + ", \"" + nombre + "\", \"" + email + "\")'>Editar</button>");
                     out.println("<button onclick='eliminarCliente(" + id + ")'>Eliminar</button>");
                     out.println("</td>");
                     out.println("</tr>");

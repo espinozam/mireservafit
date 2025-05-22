@@ -15,12 +15,12 @@
   </form>
   
   <!-- Formulario para editar cliente -->
-<form id="formEditarCliente" style="display:none;" onsubmit="editarCliente(event)">
-  <input type="hidden" name="id" id="editarId" />
-  <input type="text" name="nombre" id="editarNombre" placeholder="Nombre" required />
-  <input type="email" name="email" id="editarEmail" placeholder="Email" required />
-  <button type="submit">Guardar Cambios</button>
-</form>
+  <form id="formEditarCliente" style="display:none;" onsubmit="guardarEdicionCliente(event)">
+    <input type="hidden" name="id" id="editarId" />
+    <input type="text" name="nombre" id="editarNombre" placeholder="Nombre" required />
+    <input type="email" name="email" id="editarEmail" placeholder="Email" required />
+    <button type="submit">Guardar Cambios</button>
+  </form>
 
   <!-- Aquí se carga la tabla de clientes -->
   <div id="listaClientes"></div>
