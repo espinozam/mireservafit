@@ -35,9 +35,18 @@ function agregarReserva(event) {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
         alert(xhr.responseText);
-        cargarReservas();
-        form.reset();
-        form.style.display = 'none';
+        // No ocultar el formulario si hay error de cliente o entrenador no existe o solapamiento
+        const resp = xhr.responseText.trim();
+        if (
+          resp !== "El cliente no existe." &&
+          resp !== "El entrenador no existe." &&
+          resp !== "No se puede reservar en una fecha y hora pasada." &&
+          !resp.includes("Ya existe una reserva")
+        ) {
+          cargarReservas();
+          form.reset();
+          form.style.display = 'none';
+        }
       } else {
         alert("Error al guardar la reserva.");
       }

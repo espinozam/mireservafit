@@ -7,6 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @WebServlet("/ReservaAddServlet")
 public class ReservaAddServlet extends HttpServlet {
@@ -42,6 +46,22 @@ public class ReservaAddServlet extends HttpServlet {
 			entrenadorId = Integer.parseInt(entrenadorIdStr);
 		} catch (NumberFormatException e) {
 			response.getWriter().println("ID inválido.");
+			return;
+		}
+
+		// Validar que la fecha y hora de la reserva no sean anteriores al momento actual
+		try {
+			LocalDate fechaReserva = LocalDate.parse(fecha);
+			LocalTime horaReserva = LocalTime.parse(hora);
+			LocalDateTime fechaHoraReserva = LocalDateTime.of(fechaReserva, horaReserva);
+			LocalDateTime ahora = LocalDateTime.now();
+
+			if (fechaHoraReserva.isBefore(ahora)) {
+				response.getWriter().println("No se puede reservar en una fecha y hora pasada.");
+				return;
+			}
+		} catch (Exception e) {
+			response.getWriter().println("Fecha u hora inválida.");
 			return;
 		}
 

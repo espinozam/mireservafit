@@ -2,13 +2,13 @@
 
 ## Pendientes
 - [x] Comprobar si existe solapamiento antes de crear reserva
+- [x] Comprobar que fecha de reserva se posterior a fecha y hora actual
 - [ ] Validar que los IDs de cliente/entrenador existan antes de insertar reserva
 - [ ] Mostrar clientes y entrenadores existentes/seleccionables en frontend
-- [ ] Agregar campo "observaciones" en reservas
 - [ ] Permitir cancelar reserva
 
 ## Hecho
 - [x] Crear tabla reserva
 - [x] Servlet ClienteAddServlet
 - [x] Diseño del diagrama UML en Mermaid
-- [ ] Conectar frontend de reservas con backend
+- [x] Conectar frontend de reservas con backend
