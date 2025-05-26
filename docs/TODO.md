@@ -3,7 +3,7 @@
 ## Pendientes
 - [x] Comprobar si existe solapamiento antes de crear reserva
 - [x] Comprobar que fecha de reserva se posterior a fecha y hora actual
-- [ ] Validar que los IDs de cliente/entrenador existan antes de insertar reserva
+- [x] Validar que los IDs de cliente/entrenador existan antes de insertar reserva
 - [ ] Mostrar clientes y entrenadores existentes/seleccionables en frontend
 - [ ] Permitir cancelar reserva
 

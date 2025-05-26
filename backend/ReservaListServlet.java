@@ -26,7 +26,7 @@ public class ReservaListServlet extends HttpServlet {
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             String sql = """
-                SELECT r.id, r.fecha, r.hora, c.nombre AS cliente, e.nombre AS entrenador, r.duracion AS duracion
+                SELECT r.id, r.fecha, r.hora, c.nombre AS cliente, e.nombre AS entrenador, r.duracion AS duracion, c.id AS cliente_id, e.id AS entrenador_id
                 FROM reserva r
                 JOIN cliente c ON r.cliente_id = c.id
                 JOIN entrenador e ON r.entrenador_id = e.id
@@ -38,7 +38,7 @@ public class ReservaListServlet extends HttpServlet {
                  PrintWriter out = response.getWriter()) {
 
                 out.println("<table border='1'>");
-                out.println("<tr><th>ID</th><th>Fecha</th><th>Hora</th><th>Cliente</th><th>Entrenador</th><th>Duración</th></tr>");
+                out.println("<tr><th>ID</th><th>Fecha</th><th>Hora</th><th>Cliente</th><th>Entrenador</th><th>Duración</th><th>Acciones</th></tr>");
 
                 while (rs.next()) {
                     int id = rs.getInt("id");
@@ -47,9 +47,21 @@ public class ReservaListServlet extends HttpServlet {
                     String cliente = rs.getString("cliente");
                     String entrenador = rs.getString("entrenador");
                     String duracion = rs.getString("duracion");
-
-                    out.printf("<tr><td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>%n",
-                            id, fecha, hora, cliente, entrenador, duracion);
+                    int clienteId = rs.getInt("cliente_id");
+                    int entrenadorId = rs.getInt("entrenador_id");
+                    
+                    out.printf(
+                            "<tr>" +
+                                "<td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>" +
+                                "<td>" +
+                                    "<button class='btn-editar-reserva' " +
+                                        "data-id='%d' data-fecha='%s' data-hora='%s' data-cliente-id='%d' data-entrenador-id='%d'>Modificar</button> " +
+                                    "<button class='btn-eliminar-reserva' data-id='%d'>Eliminar</button>" +
+                                "</td>" +
+                            "</tr>%n",
+                            id, fecha, hora, cliente, entrenador, duracion,
+                            id, fecha, hora, clienteId, entrenadorId, id
+                        );
                 }
 
                 out.println("</table>");
