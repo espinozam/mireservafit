@@ -36,9 +36,7 @@ function agregarCliente(event) {
 
     const nombre = document.querySelector('#formCliente input[name="nombre"]').value;
     const email = document.querySelector('#formCliente input[name="email"]').value;
-
-    alert("Enviando:", nombre, email);
-
+    
     const xhr = new XMLHttpRequest();
     xhr.open("POST", `${baseURL}/ClienteAddServlet`, true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

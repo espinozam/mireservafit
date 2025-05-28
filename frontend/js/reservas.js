@@ -2,12 +2,6 @@ const baseURL = 'http://localhost:8080/MiReservaFit';
 
 window.onload = cargarReservas;
 
-function mostrarFormularioReserva() {
-  document.getElementById('formReserva').reset();
-  document.getElementById('formReserva').dataset.editing = "";
-  document.getElementById('formReserva').style.display = 'block';
-}
-
 function cargarReservas() {
   const xhr = new XMLHttpRequest();
   xhr.open("GET", `${baseURL}/ReservaListServlet`, true);
@@ -42,13 +36,15 @@ function cargarReservas() {
 }
 
 function agregarReserva(event) {
-  event.preventDefault();
+  console.log("Agregando reserva...");
+  
+  event.preventDefault(); // Prevenir el envío del formulario para manejarlo con AJAX
 
   const form = document.getElementById('formReserva');
   const fecha = form.querySelector('input[name="fecha"]').value;
-  const hora = form.querySelector('input[name="hora"]').value;
-  const clienteId = form.querySelector('input[name="cliente_id"]').value;
-  const entrenadorId = form.querySelector('input[name="entrenador_id"]').value;
+  const hora = form.querySelector('select[name="hora"]').value;
+  const clienteId = form.querySelector('select[name="cliente_id"]').value;
+  const entrenadorId = form.querySelector('select[name="entrenador_id"]').value;
   const reservaId = form.dataset.editing || "";
 
   const xhr = new XMLHttpRequest();
@@ -92,12 +88,28 @@ function agregarReserva(event) {
 // Llenar el formulario para editar una reserva
 function editarReserva(id, fecha, hora, clienteId, entrenadorId) {
   const form = document.getElementById('formReserva');
-  form.querySelector('input[name="fecha"]').value = fecha;
-  form.querySelector('input[name="hora"]').value = hora;
-  form.querySelector('input[name="cliente_id"]').value = clienteId;
-  form.querySelector('input[name="entrenador_id"]').value = entrenadorId;
+  form.reset();
   form.dataset.editing = id;
   form.style.display = 'block';
+
+  // Cargar selects de clientes y entrenadores
+  cargarClientes();
+  cargarEntrenadores();
+
+  // Asignar fecha, cliente y entrenador después de cargar selects
+  setTimeout(() => {
+    form.querySelector('input[name="fecha"]').value = fecha;
+    form.querySelector('select[name="cliente_id"]').value = clienteId;
+    form.querySelector('select[name="entrenador_id"]').value = entrenadorId;
+
+    // Cargar horas disponibles para ese día y entrenador
+    cargarHorasDisponibles();
+
+    // Asignar la hora después de cargar las opciones de hora
+    setTimeout(() => {
+      form.querySelector('select[name="hora"]').value = hora;
+    }, 300);
+  }, 300);
 }
 
 function eliminarReserva(id) {
@@ -117,4 +129,95 @@ function eliminarReserva(id) {
   };
 
   xhr.send(`id=${encodeURIComponent(id)}`);
+}
+
+function cargarHorasDisponibles() {
+  const fecha = document.getElementById('fecha').value;
+  const entrenadorId = document.getElementById('entrenador_id').value;
+  const horaSel = document.getElementById('hora');
+  limpiarHoras();
+
+  if (!fecha || !entrenadorId) return;
+
+  // AJAX clásico para cargar las opciones HTML
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", `${baseURL}/HorasDisponiblesServlet?fecha=${fecha}&entrenador_id=${entrenadorId}`, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      horaSel.innerHTML = xhr.responseText;
+    }
+  };
+  xhr.send();
+}
+
+
+// Simulación: reemplaza por AJAX a tu backend para obtener clientes y entrenadores reales
+const clientes = [
+  { id: 1, nombre: "Carlos" },
+  { id: 2, nombre: "Marta" }
+];
+const entrenadores = [
+  { id: 1, nombre: "Ana" },
+  { id: 2, nombre: "Luis" }
+];
+
+// Cargar clientes y entrenadores desde el backend al abrir el formulario
+function mostrarFormularioReserva() {
+  document.getElementById('formReserva').reset();
+  document.getElementById('formReserva').style.display = 'block';
+  cargarClientes();
+  cargarEntrenadores();
+  limpiarHoras();
+}
+
+function cargarClientes() {
+  const clienteSel = document.getElementById('cliente_id');
+  clienteSel.innerHTML = '<option value="">Seleccione cliente</option>';
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", `${baseURL}/ClientesSelectServlet`, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      clienteSel.innerHTML += xhr.responseText;
+    }
+  };
+  xhr.send();
+}
+
+function cargarEntrenadores() {
+  const entrenadorSel = document.getElementById('entrenador_id');
+  entrenadorSel.innerHTML = '<option value="">Seleccione entrenador</option>';
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", `${baseURL}/EntrenadoresSelectServlet`, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      entrenadorSel.innerHTML += xhr.responseText;
+    }
+  };
+  xhr.send();
+}
+
+function limpiarHoras() {
+  const horaSel = document.getElementById('hora');
+  horaSel.innerHTML = '<option value="">Seleccione hora disponible</option>';
+}
+
+document.getElementById('fecha').addEventListener('change', cargarHorasDisponibles);
+document.getElementById('entrenador_id').addEventListener('change', cargarHorasDisponibles);
+
+function cargarHorasDisponibles() {
+  const fecha = document.getElementById('fecha').value;
+  const entrenadorId = document.getElementById('entrenador_id').value;
+  const horaSel = document.getElementById('hora');
+  limpiarHoras();
+
+  if (!fecha || !entrenadorId) return;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", `${baseURL}/HorasDisponiblesServlet?fecha=${fecha}&entrenador_id=${entrenadorId}`, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      horaSel.innerHTML = xhr.responseText;
+    }
+  };
+  xhr.send();
 }

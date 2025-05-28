@@ -13,7 +13,7 @@ public class ClienteAddServlet extends HttpServlet {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/mireservafit_db";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = ""; // Actualiza si tienes contraseña
+    private static final String DB_PASSWORD = "";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -22,12 +22,9 @@ public class ClienteAddServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain; charset=UTF-8");
-
+        
         String nombre = request.getParameter("nombre");
         String email = request.getParameter("email");
-
-        System.out.println("Nombre recibido: " + nombre);
-        System.out.println("Email recibido: " + email);
 
         if (nombre == null || email == null || nombre.isEmpty() || email.isEmpty()) {
             response.getWriter().println("Nombre y email son obligatorios.");
@@ -53,8 +50,5 @@ public class ClienteAddServlet extends HttpServlet {
             response.getWriter().println("Error SQL: " + e.getMessage());
         }
     }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "Este endpoint solo acepta POST.");
-    }
+    
 }

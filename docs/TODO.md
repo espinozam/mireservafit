@@ -4,8 +4,9 @@
 - [x] Comprobar si existe solapamiento antes de crear reserva
 - [x] Comprobar que fecha de reserva se posterior a fecha y hora actual
 - [x] Validar que los IDs de cliente/entrenador existan antes de insertar reserva
-- [ ] Mostrar clientes y entrenadores existentes/seleccionables en frontend
-- [ ] Permitir cancelar reserva
+- [x] Permitir cancelar reserva
+- [x] Mostrar clientes y entrenadores existentes/seleccionables en frontend
+- [x] Mostrar horarios disponibles
 
 ## Hecho
 - [x] Crear tabla reserva
