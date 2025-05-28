@@ -9,8 +9,8 @@ public abstract class Persona {
 
     // Constructor con todos los parámetros
     public Persona(Long id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
+        this.setId(id);
+        this.setNombre(nombre);
     }
 
     // Getters y setters
@@ -29,4 +29,5 @@ public abstract class Persona {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    
 }

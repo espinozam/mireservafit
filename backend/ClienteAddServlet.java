@@ -37,7 +37,7 @@ public class ClienteAddServlet extends HttpServlet {
                 stmt.setString(1, nombre);
                 stmt.setString(2, email);
                 int filas = stmt.executeUpdate();
-
+                
                 PrintWriter out = response.getWriter();
                 if (filas > 0) {
                     out.println("Cliente agregado correctamente.");
