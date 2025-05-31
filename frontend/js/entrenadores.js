@@ -35,7 +35,7 @@ function agregarEntrenador(event) {
     event.preventDefault();
 
     const nombre = document.querySelector('#formEntrenador input[name="nombre"]').value;
-    const email = document.querySelector('#formEntrenador input[name="email"]').value;
+    const especialidad = document.querySelector('#formEntrenador input[name="especialidad"]').value;
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", `${baseURL}/EntrenadorAddServlet`, true);
@@ -54,7 +54,7 @@ function agregarEntrenador(event) {
         }
     };
 
-    const params = `nombre=${encodeURIComponent(nombre)}&email=${encodeURIComponent(email)}`;
+    const params = `nombre=${encodeURIComponent(nombre)}&especialidad=${encodeURIComponent(especialidad)}`;
     xhr.send(params);
 }
 
@@ -96,10 +96,10 @@ function mostrarFormularioAgregar() {
 }
 
 // Muestra el formulario de edición con los datos del entrenador
-function editarEntrenador(id, nombre, email) {
+function editarEntrenador(id, nombre, especialidad) {
     document.getElementById('editarId').value = id;
     document.getElementById('editarNombre').value = nombre;
-    document.getElementById('editarEmail').value = email;
+    document.getElementById('editarEspecialidad').value = especialidad;
     document.getElementById('formEditarEntrenador').style.display = 'block';
 }
 
@@ -109,7 +109,7 @@ function guardarEdicionEntrenador(event) {
 
     const id = document.getElementById('editarId').value;
     const nombre = document.getElementById('editarNombre').value;
-    const email = document.getElementById('editarEspecialidad').value;
+    const especialidad = document.getElementById('editarEspecialidad').value;
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", `${baseURL}/EntrenadorUpdateServlet`, true);
@@ -129,6 +129,6 @@ function guardarEdicionEntrenador(event) {
         }
     };
 
-    const params = `id=${encodeURIComponent(id)}&nombre=${encodeURIComponent(nombre)}&email=${encodeURIComponent(email)}`;
+    const params = `id=${encodeURIComponent(id)}&nombre=${encodeURIComponent(nombre)}&especialidad=${encodeURIComponent(especialidad)}`;
     xhr.send(params);
 }
