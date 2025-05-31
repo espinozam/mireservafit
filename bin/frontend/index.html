@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestor de Clientes</title>
+</head>
+<body>
+  <h1>Gestión de Clientes</h1>
+
+  <!-- Formulario oculto para agregar cliente -->
+  <form id="formCliente" style="display:none;" onsubmit="agregarCliente(event)">
+    <input type="text" name="nombre" placeholder="Nombre" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <button type="submit">Agregar Cliente</button>
+  </form>
+  
+  <!-- Formulario para editar cliente -->
+<form id="formEditarCliente" style="display:none;" onsubmit="editarCliente(event)">
+  <input type="hidden" name="id" id="editarId" />
+  <input type="text" name="nombre" id="editarNombre" placeholder="Nombre" required />
+  <input type="email" name="email" id="editarEmail" placeholder="Email" required />
+  <button type="submit">Guardar Cambios</button>
+</form>
+
+  <!-- Aquí se carga la tabla de clientes -->
+  <div id="listaClientes"></div>
+  
+  <script src="js/cliente.js"></script>
+    
+</body>
+</html>
