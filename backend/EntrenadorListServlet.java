@@ -6,8 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 
 @WebServlet("/EntrenadorListServlet")
 public class EntrenadorListServlet extends HttpServlet {
@@ -22,27 +21,47 @@ public class EntrenadorListServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "GET");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-        response.setContentType("application/json; charset=UTF-8");
+
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
+
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             String sql = "SELECT id, nombre, especialidad FROM entrenador";
             try (PreparedStatement stmt = conn.prepareStatement(sql);
                  ResultSet rs = stmt.executeQuery()) {
 
-                JSONArray entrenadores = new JSONArray();
+
+            	out.println("<html><body>");
+                out.println("<h2>Lista de Entrenadores</h2>");
+
+                out.println("<button onclick=\"mostrarFormularioAgregar()\">Añadir Entrenador</button><br><br>");
+
+                out.println("<table border='1'>");
+                out.println("<tr><th>ID</th><th>Nombre</th><th>especialidad</th><th>Acciones</th></tr>");
 
                 while (rs.next()) {
-                    JSONObject entrenador = new JSONObject();
-                    entrenador.put("id", rs.getInt("id"));
-                    entrenador.put("nombre", rs.getString("nombre"));
-                    entrenador.put("especialidad", rs.getString("especialidad"));
-                    entrenadores.put(entrenador);
+                    int id = rs.getInt("id");
+                    String nombre = rs.getString("nombre");
+                    String especialidad = rs.getString("especialidad");
+
+                    out.println("<tr>");
+                    out.println("<td>" + id + "</td>");
+                    out.println("<td>" + nombre + "</td>");
+                    out.println("<td>" + especialidad + "</td>");
+                    out.println("<td>");
+                    out.println("<button onclick='editarEntrenador(" + id + ")'>Editar</button>");
+                    out.println("<button onclick='eliminarEntrenador(" + id + ")'>Eliminar</button>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                }
+                out.println("</table>");
+
+
+                out.println("</body></html>");
                 }
 
-                PrintWriter out = response.getWriter();
-                out.print(entrenadores.toString());
-                out.flush();
-            }
         } catch (SQLException e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
