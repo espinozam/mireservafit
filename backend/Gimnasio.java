@@ -1,82 +1,143 @@
 import java.util.ArrayList;
 
 public class Gimnasio {
+    // Atributos
+    private static Long contadorId = 1L; // Id autogenerado
 
-	// Atributos
     private Long id;
     private String nombre;
     private String direccion;
-    private ArrayList<Cliente> clientes;
-    private ArrayList<Entrenador> entrenadores;
-    private ArrayList<Reserva> reservas;
+    private String telefono;
+    private String email;
+    private ArrayList<Cliente> listaClientes;
+    private ArrayList<Entrenador> listaEntrenadores;
+    private ArrayList<Reserva> listaReservas;
 
-	static Long contador = 0L; // ID inicializado a 0
+    // Constructor vacío
+    public Gimnasio() {
+        this.id = contadorId++;
+        this.setNombre("Sin nombre");
+        this.setDireccion("Sin dirección");
+        this.setTelefono("");
+        this.setEmail("");
+        this.setListaClientes(new ArrayList<>());
+        this.setListaEntrenadores(new ArrayList<>());
+        this.setListaReservas(new ArrayList<>());
+    }
 
-	// constructor vacío
-	public Gimnasio() {
-		this.setId(contador++);
-		// Inicializamos los atributos con valores por defecto
-		this.setDireccion("No definida");
-		this.setNombre("nombre no definido");
-		this.setClientes(new ArrayList<>());
-		this.setEntrenadores(new ArrayList<>());
-		this.setReservas(new ArrayList<>());
-	}
+    // Constructor con todos los parámetros (id autogenerado)
+    public Gimnasio(String nombre, String direccion, String telefono, String email,
+                    ArrayList<Cliente> listaClientes, ArrayList<Entrenador> listaEntrenadores, ArrayList<Reserva> listaReservas) {
+        this.id = contadorId++;
+        this.setNombre(nombre);
+        this.setDireccion(direccion);
+        this.setTelefono(telefono);
+        this.setEmail(email);
+        this.setListaClientes(listaClientes);
+        this.setListaEntrenadores(listaEntrenadores);
+        this.setListaReservas(listaReservas);
+    }
 
-	// constructor con parámetros
-	public Gimnasio(Long id, String nombre, String direccion,
-		ArrayList<Cliente> clientes, ArrayList<Entrenador> entrenadores,
-		ArrayList<Reserva> reservas) {
-		this.setId(id);
-		this.setNombre(nombre);
-		this.setDireccion(direccion);
-		this.setClientes(clientes);
-		this.setEntrenadores(entrenadores);
-		this.setReservas(reservas);
-	}
-    
-    // getters y setters
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getNombre() {
-		return nombre;
-	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-	public String getDireccion() {
-		return direccion;
-	}
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
-	}
+    // toString
+    @Override
+    public String toString() {
+        return "Gimnasio [id=" + id + ", nombre=" + nombre + ", direccion=" + direccion + ", telefono=" + telefono +
+                ", email=" + email + ", listaClientes=" + listaClientes + ", listaEntrenadores=" + listaEntrenadores +
+                ", listaReservas=" + listaReservas + "]";
+    }
 
-	public ArrayList<Cliente> getClientes() {
-	    return clientes;
-	}
+    // Getters y Setters
+    public Long getId() {
+        return id;
+    }
 
-	public void setClientes(ArrayList<Cliente> clientes) {
-	    this.clientes = clientes;
-	}
+    // No se crea setId para evitar modificar el id autogenerado
 
-	public ArrayList<Entrenador> getEntrenadores() {
-	    return entrenadores;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public void setEntrenadores(ArrayList<Entrenador> entrenadores) {
-	    this.entrenadores = entrenadores;
-	}
+    public void setNombre(String nombre) {
+        // Comprobar que nombre empieza por mayúscula
+        if (nombre != null && !nombre.isEmpty() && Character.isUpperCase(nombre.charAt(0))) {
+            this.nombre = nombre;
+        } else {
+            System.out.println("El nombre debe empezar por mayúscula.");
+            this.nombre = "Sin nombre";
+        }
+    }
 
-	public ArrayList<Reserva> getReservas() {
-	    return reservas;
-	}
+    public String getDireccion() {
+        return direccion;
+    }
 
-	public void setReservas(ArrayList<Reserva> reservas) {
-	    this.reservas = reservas;
-	}
-    
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public ArrayList<Cliente> getListaClientes() {
+        return listaClientes;
+    }
+
+    public void setListaClientes(ArrayList<Cliente> listaClientes) {
+        this.listaClientes = listaClientes;
+    }
+
+    public ArrayList<Entrenador> getListaEntrenadores() {
+        return listaEntrenadores;
+    }
+
+    public void setListaEntrenadores(ArrayList<Entrenador> listaEntrenadores) {
+        this.listaEntrenadores = listaEntrenadores;
+    }
+
+    public ArrayList<Reserva> getListaReservas() {
+        return listaReservas;
+    }
+
+    public void setListaReservas(ArrayList<Reserva> listaReservas) {
+        this.listaReservas = listaReservas;
+    }
+
+    // Métodos de utilidad
+    public void addCliente(Cliente cliente) {
+        this.listaClientes.add(cliente);
+    }
+
+    public void addEntrenador(Entrenador entrenador) {
+        this.listaEntrenadores.add(entrenador);
+    }
+
+    public void addReserva(Reserva reserva) {
+        this.listaReservas.add(reserva);
+    }
+
+    // Mostrar listas
+    public void mostrarListaClientes() {
+        System.out.println(this.listaClientes);
+    }
+
+    public void mostrarListaEntrenadores() {
+        System.out.println(this.listaEntrenadores);
+    }
+
+    public void mostrarListaReservas() {
+        System.out.println(this.listaReservas);
+    }
 }
