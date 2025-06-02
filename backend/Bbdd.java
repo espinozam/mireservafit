@@ -23,12 +23,15 @@ public class Bbdd {
         return conBD;
     }
 
-    // Guardar cliente (ejemplo simple)
-    public static void guardarCliente(String nombre, String email) {
+    // Guardar cliente
+    public static void guardarCliente(String nombre, String email, String telefono, int gimnasioId) {
         Statement stm = null;
+        Connection con = null;
         try {
-            stm = conectar().createStatement();
-            String sql = "INSERT INTO cliente (nombre, email) VALUES ('" + nombre + "', '" + email + "')";
+            con = conectar();
+            String sql = "INSERT INTO cliente (nombre, email, telefono, gimnasio_id) VALUES ('"
+                    + nombre + "', '" + email + "', '" + telefono + "', " + gimnasioId + ")";
+            stm = con.createStatement();
             stm.executeUpdate(sql);
             System.out.println("Insertado: " + nombre);
         } catch (SQLException error) {
@@ -67,4 +70,177 @@ public class Bbdd {
         return resultado;
     }
 
+    // Recuperar lista de gimnasios
+    public static ArrayList<Gimnasio> obtenerGimnasios() {
+        ArrayList<Gimnasio> listaGimnasios = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = conectar();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT id, nombre, direccion, telefono, email FROM gimnasio");
+            while (resultSet.next()) {
+                Gimnasio gimnasio = new Gimnasio(
+                    resultSet.getLong("id"),
+                    resultSet.getString("nombre"),
+                    resultSet.getString("direccion"),
+                    resultSet.getString("telefono"),
+                    resultSet.getString("email"),
+                    new ArrayList<>(), // listaClientes
+                    new ArrayList<>(), // listaEntrenadores
+                    new ArrayList<>()  // listaReservas
+                );
+                listaGimnasios.add(gimnasio);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener gimnasios: " + e.getMessage());
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } catch (Exception ignored) {}
+            try { if (statement != null) statement.close(); } catch (Exception ignored) {}
+            try { if (connection != null) connection.close(); } catch (Exception ignored) {}
+        }
+        return listaGimnasios;
+    }
+
+    // Recuperar lista de clientes
+    public static ArrayList<Cliente> obtenerClientes() {
+        ArrayList<Cliente> listaClientes = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = conectar();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT id, dni, nombre, apellido1, apellido2, edad, email, contrasena, gimnasio_id, direccion, telefono FROM cliente");
+            while (resultSet.next()) {
+                // Recuperar el gimnasio asociado
+                Gimnasio gimnasio = null;
+                Long gimnasioId = resultSet.getLong("gimnasio_id");
+                ArrayList<Gimnasio> listaGimnasios = obtenerGimnasios();
+                for (Gimnasio g : listaGimnasios) {
+                    if (g.getId().equals(gimnasioId)) {
+                        gimnasio = g;
+                        break;
+                    }
+                }
+                Cliente cliente = new Cliente(
+                    resultSet.getLong("id"),
+                    resultSet.getString("dni"),
+                    resultSet.getString("nombre"),
+                    resultSet.getString("apellido1"),
+                    resultSet.getString("apellido2"),
+                    resultSet.getInt("edad"),
+                    resultSet.getString("email"),
+                    resultSet.getString("contrasena"),
+                    gimnasio,
+                    resultSet.getString("direccion"),
+                    resultSet.getString("telefono"),
+                    new ArrayList<>()
+                );
+                listaClientes.add(cliente);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener clientes: " + e.getMessage());
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } catch (Exception ignored) {}
+            try { if (statement != null) statement.close(); } catch (Exception ignored) {}
+            try { if (connection != null) connection.close(); } catch (Exception ignored) {}
+        }
+        return listaClientes;
+    }
+
+    // Recuperar lista de entrenadores
+    public static ArrayList<Entrenador> obtenerEntrenadores() {
+        ArrayList<Entrenador> listaEntrenadores = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = conectar();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT id, dni, nombre, apellido1, apellido2, edad, email, contrasena, gimnasio_id, especialidad FROM entrenador");
+            // Recuperar todos los gimnasios una sola vez
+            ArrayList<Gimnasio> listaGimnasios = obtenerGimnasios();
+            while (resultSet.next()) {
+                // Buscar el gimnasio asociado
+                Gimnasio gimnasio = null;
+                Long gimnasioId = resultSet.getLong("gimnasio_id");
+                for (Gimnasio g : listaGimnasios) {
+                    if (g.getId().equals(gimnasioId)) {
+                        gimnasio = g;
+                        break;
+                    }
+                }
+                Entrenador entrenador = new Entrenador(
+                    resultSet.getLong("id"),
+                    resultSet.getString("dni"),
+                    resultSet.getString("nombre"),
+                    resultSet.getString("apellido1"),
+                    resultSet.getString("apellido2"),
+                    resultSet.getInt("edad"),
+                    resultSet.getString("email"),
+                    resultSet.getString("contrasena"),
+                    gimnasio,
+                    resultSet.getString("especialidad")
+                );
+                listaEntrenadores.add(entrenador);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener entrenadores: " + e.getMessage());
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } catch (Exception ignored) {}
+            try { if (statement != null) statement.close(); } catch (Exception ignored) {}
+            try { if (connection != null) connection.close(); } catch (Exception ignored) {}
+        }
+        return listaEntrenadores;
+    }
+
+    // Recuperar lista de reservas
+    public static ArrayList<Reserva> obtenerReservas() {
+        ArrayList<Reserva> listaReservas = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = conectar();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT id, cliente_id, entrenador_id, fecha, hora FROM reserva");
+            // Recuperar listas de clientes y entrenadores una sola vez
+            ArrayList<Cliente> listaClientes = obtenerClientes();
+            ArrayList<Entrenador> listaEntrenadores = obtenerEntrenadores();
+            while (resultSet.next()) {
+                Cliente cliente = null;
+                Entrenador entrenador = null;
+                Long clienteId = resultSet.getLong("cliente_id");
+                Long entrenadorId = resultSet.getLong("entrenador_id");
+                for (Cliente c : listaClientes) {
+                    if (c.getId().equals(clienteId)) {
+                        cliente = c;
+                        break;
+                    }
+                }
+                for (Entrenador e : listaEntrenadores) {
+                    if (e.getId().equals(entrenadorId)) {
+                        entrenador = e;
+                        break;
+                    }
+                }
+                Reserva reserva = new Reserva(
+                    cliente,
+                    entrenador,
+                    resultSet.getDate("fecha").toLocalDate(),
+                    resultSet.getTime("hora").toLocalTime()
+                );
+                listaReservas.add(reserva);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener reservas: " + e.getMessage());
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } catch (Exception ignored) {}
+            try { if (statement != null) statement.close(); } catch (Exception ignored) {}
+            try { if (connection != null) connection.close(); } catch (Exception ignored) {}
+        }
+        return listaReservas;
+    }
 }

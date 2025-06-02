@@ -42,8 +42,15 @@ public abstract class Persona {
     // toString
     @Override
     public String toString() {
-        return "Persona [id=" + id + ", dni=" + dni + ", nombre=" + nombre + ", apellido1=" + apellido1 +
-                ", apellido2=" + apellido2 + ", edad=" + edad + ", email=" + email + "]";
+        return "Persona [\n"
+                + "  id=" + id + ",\n"
+                + "  dni=" + dni + ",\n"
+                + "  nombre=" + nombre + ",\n"
+                + "  apellido1=" + apellido1 + ",\n"
+                + "  apellido2=" + apellido2 + ",\n"
+                + "  edad=" + edad + ",\n"
+                + "  email=" + email + "\n"
+                + "]";
     }
 
     // Método para solicitar datos de la persona
@@ -70,7 +77,7 @@ public abstract class Persona {
     // Método abstracto para cambiar contraseña
     public abstract void cambiarContrasena();
 
-    // Cifrado César para codifica y decodifica la contraseña
+    // Cifrado César para codificar y decodificar la contraseña
 
     /*
      * Cifrado César: cada letra se sustituye por otra un número fijo de posiciones adelante en el alfabeto.

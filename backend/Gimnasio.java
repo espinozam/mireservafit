@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Gimnasio {
     // Atributos
@@ -25,10 +26,10 @@ public class Gimnasio {
         this.setListaReservas(new ArrayList<>());
     }
 
-    // Constructor con todos los parámetros (id autogenerado)
-    public Gimnasio(String nombre, String direccion, String telefono, String email,
+    // Constructor para crear desde BBDD
+    public Gimnasio(Long id, String nombre, String direccion, String telefono, String email,
                     ArrayList<Cliente> listaClientes, ArrayList<Entrenador> listaEntrenadores, ArrayList<Reserva> listaReservas) {
-        this.id = contadorId++;
+        this.setId(id);
         this.setNombre(nombre);
         this.setDireccion(direccion);
         this.setTelefono(telefono);
@@ -36,14 +37,25 @@ public class Gimnasio {
         this.setListaClientes(listaClientes);
         this.setListaEntrenadores(listaEntrenadores);
         this.setListaReservas(listaReservas);
+        // Actualizar contadorId si es necesario
+        if (id >= contadorId) {
+            Gimnasio.contadorId = id + 1;
+        }
     }
 
     // toString
     @Override
     public String toString() {
-        return "Gimnasio [id=" + id + ", nombre=" + nombre + ", direccion=" + direccion + ", telefono=" + telefono +
-                ", email=" + email + ", listaClientes=" + listaClientes + ", listaEntrenadores=" + listaEntrenadores +
-                ", listaReservas=" + listaReservas + "]";
+        return "Gimnasio [\n"
+                + "  id=" + this.id + ",\n"
+                + "  nombre=" + this.nombre + ",\n"
+                + "  direccion=" + this.direccion + ",\n"
+                + "  telefono=" + this.telefono + ",\n"
+                + "  email=" + this.email + ",\n"
+                + "  listaClientes=" + this.listaClientes + ",\n"
+                + "  listaEntrenadores=" + this.listaEntrenadores + ",\n"
+                + "  listaReservas=" + this.listaReservas + "\n"
+                + "]";
     }
 
     // Getters y Setters
@@ -52,6 +64,9 @@ public class Gimnasio {
     }
 
     // No se crea setId para evitar modificar el id autogenerado
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNombre() {
         return nombre;
@@ -139,5 +154,35 @@ public class Gimnasio {
 
     public void mostrarListaReservas() {
         System.out.println(this.listaReservas);
+    }
+
+    // Método estático para mostrar lista de clientes desde la base de datos
+    public static void mostrarClientesBD() {
+        ArrayList<String> listaClientes = Bbdd.descargarClientes();
+        System.out.println("=== Lista de clientes en la base de datos ===");
+        for (String cliente : listaClientes) {
+            System.out.println(cliente);
+        }
+    }
+
+    public static Gimnasio elegirGimnasio() {
+        Scanner teclado = new Scanner(System.in);
+        ArrayList<Gimnasio> listaGimnasios = Bbdd.obtenerGimnasios();
+        if (listaGimnasios.isEmpty()) {
+            System.out.println("No hay gimnasios disponibles.");
+            return null;
+        }
+        System.out.println("Elige tu gimnasio:");
+        for (int i = 0; i < listaGimnasios.size(); i++) {
+            System.out.println((i + 1) + ". " + listaGimnasios.get(i).getNombre());
+        }
+        int gymIndex = teclado.nextInt() - 1;
+        teclado.nextLine(); // Limpiar el buffer
+        if (gymIndex >= 0 && gymIndex < listaGimnasios.size()) {
+            return listaGimnasios.get(gymIndex);
+        } else {
+            System.out.println("Índice de gimnasio no válido. No se asignará ningún gimnasio.");
+            return null;
+        }
     }
 }

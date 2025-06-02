@@ -15,13 +15,17 @@ public class Entrenador extends Persona {
         this.setEspecialidad("");
     }
 
-    // Constructor con todos los parámetros
-    public Entrenador(String dni, String nombre, String apellido1, String apellido2, int edad, String email, String contrasena,
+    // Constructor para crear desde BBDD
+    public Entrenador(Long id, String dni, String nombre, String apellido1, String apellido2, int edad, String email, String contrasena,
                       Gimnasio gimnasio, String especialidad) {
         super(dni, nombre, apellido1, apellido2, edad, email, contrasena);
-        this.setId(contadorId++);
+        this.setId(id);
         this.setGimnasio(gimnasio);
         this.setEspecialidad(especialidad);
+        // Actualizar contadorId si es necesario
+        if (id >= contadorId) {
+            Entrenador.contadorId = id + 1;
+        }
     }
 
     @Override
@@ -62,7 +66,8 @@ public class Entrenador extends Persona {
         System.out.println("/////// Datos del entrenador ///////");
         System.out.print("Especialidad: ");
         this.setEspecialidad(teclado.nextLine());
-        // Aquí podrías pedir el gimnasio si lo deseas
+        // Elegir gimnasio
+        this.setGimnasio(Gimnasio.elegirGimnasio());
     }
 
     // Implementación del método abstracto

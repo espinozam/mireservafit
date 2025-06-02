@@ -20,15 +20,19 @@ public class Cliente extends Persona {
         this.setReservas(new ArrayList<>());
     }
 
-    // Constructor con todos los parámetros
-    public Cliente(String dni, String nombre, String apellido1, String apellido2, int edad, String email, String contrasena,
-                   Gimnasio gimnasio, String direccion, String telefono, ArrayList<Reserva> reservas) {
+    // Constructor para crear desde BBDD
+    public Cliente(Long id, String dni, String nombre, String apellido1, String apellido2, int edad, String email, String contrasena,
+               Gimnasio gimnasio, String direccion, String telefono, ArrayList<Reserva> reservas) {
         super(dni, nombre, apellido1, apellido2, edad, email, contrasena);
-        this.setId(contadorId++);
+        this.setId(id);
         this.setGimnasio(gimnasio);
         this.setDireccion(direccion);
         this.setTelefono(telefono);
         this.setReservas(reservas);
+        // Actualizar contadorId
+        if (id >= contadorId) {
+            Cliente.contadorId = id + 1;
+        }
     }
 
     @Override
@@ -89,7 +93,25 @@ public class Cliente extends Persona {
         this.setDireccion(teclado.nextLine());
         System.out.print("Teléfono: ");
         this.setTelefono(teclado.nextLine());
-        // Aquí podrías pedir más datos si lo necesitas
+
+        // Elegir gimnasio
+        this.setGimnasio(Gimnasio.elegirGimnasio());
+
+        // Validar que se ha asignado un gimnasio
+        if (this.getGimnasio() != null) {
+            // Guardar el cliente en la base de datos
+            Bbdd.guardarCliente(
+                this.getNombre(),
+                this.getEmail(),
+                this.getTelefono(),
+                this.getGimnasio().getId().intValue()
+            );
+            // Guardar cliente en la lista de clientes del gimnasio
+            this.getGimnasio().getListaClientes().add(this);
+            System.out.println("Cliente registrado correctamente: " + this.getNombre());
+        } else {
+            System.out.println("No se ha asignado un gimnasio al cliente.");
+        }
     }
 
     // Implementación del método abstracto
