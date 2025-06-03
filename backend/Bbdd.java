@@ -39,70 +39,6 @@ public class Bbdd {
         }
     }
 
-    // Descargar todos los clientes (devuelve lista de nombres)
-    public static ArrayList<String> descargarClientes() {
-        ArrayList<String> lista = new ArrayList<>();
-        Statement stm = null;
-        ResultSet rs = null;
-        try {
-            stm = conectar().createStatement();
-            rs = stm.executeQuery("SELECT nombre FROM cliente");
-            while (rs.next()) {
-                lista.add(rs.getString("nombre"));
-            }
-        } catch (SQLException error) {
-            System.out.println("Error SQL al descargar clientes: " + error.getMessage());
-        }
-        return lista;
-    }
-
-    // Eliminar cliente por id
-    public static String eliminarCliente(int id) {
-        String resultado = "Eliminado con éxito";
-        Statement stm = null;
-        try {
-            stm = conectar().createStatement();
-            String query = "DELETE FROM cliente WHERE id='" + id + "'";
-            stm.executeUpdate(query);
-        } catch (SQLException error) {
-            resultado = "Error al intentar eliminar cliente: " + error.getMessage();
-        }
-        return resultado;
-    }
-
-    // Recuperar lista de gimnasios
-    public static ArrayList<Gimnasio> obtenerGimnasios() {
-        ArrayList<Gimnasio> listaGimnasios = new ArrayList<>();
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = conectar();
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT id, nombre, direccion, telefono, email FROM gimnasio");
-            while (resultSet.next()) {
-                Gimnasio gimnasio = new Gimnasio(
-                    resultSet.getLong("id"),
-                    resultSet.getString("nombre"),
-                    resultSet.getString("direccion"),
-                    resultSet.getString("telefono"),
-                    resultSet.getString("email"),
-                    new ArrayList<>(), // listaClientes
-                    new ArrayList<>(), // listaEntrenadores
-                    new ArrayList<>()  // listaReservas
-                );
-                listaGimnasios.add(gimnasio);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al obtener gimnasios: " + e.getMessage());
-        } finally {
-            try { if (resultSet != null) resultSet.close(); } catch (Exception ignored) {}
-            try { if (statement != null) statement.close(); } catch (Exception ignored) {}
-            try { if (connection != null) connection.close(); } catch (Exception ignored) {}
-        }
-        return listaGimnasios;
-    }
-
     // Recuperar lista de clientes
     public static ArrayList<Cliente> obtenerClientes() {
         ArrayList<Cliente> listaClientes = new ArrayList<>();
@@ -142,12 +78,77 @@ public class Bbdd {
             }
         } catch (SQLException e) {
             System.out.println("Error al obtener clientes: " + e.getMessage());
+        }
+        return listaClientes;
+    }
+
+    // Actualizar cliente
+    public static String actualizarCliente(int id, String nombre, String email) {
+        String resultado = "No se pudo actualizar el cliente.";
+        String sql = "UPDATE cliente SET nombre = ?, email = ? WHERE id = ?";
+        try (
+            Connection conn = conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setString(1, nombre);
+            stmt.setString(2, email);
+            stmt.setInt(3, id);
+            int filas = stmt.executeUpdate();
+            if (filas > 0) {
+                resultado = "Cliente actualizado correctamente.";
+            }
+        } catch (SQLException e) {
+            resultado = "Error al actualizar cliente: " + e.getMessage();
+        }
+        return resultado;
+    }
+    
+    // Eliminar cliente por id
+    public static String eliminarCliente(int id) {
+        String resultado = "Eliminado con éxito";
+        Statement stm = null;
+        try {
+            stm = conectar().createStatement();
+            String query = "DELETE FROM cliente WHERE id='" + id + "'";
+            stm.executeUpdate(query);
+        } catch (SQLException error) {
+            resultado = "Error al intentar eliminar cliente: " + error.getMessage();
+        }
+        return resultado;
+    }
+
+    
+    // Recuperar lista de gimnasios
+    public static ArrayList<Gimnasio> obtenerGimnasios() {
+        ArrayList<Gimnasio> listaGimnasios = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = conectar();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT id, nombre, direccion, telefono, email FROM gimnasio");
+            while (resultSet.next()) {
+                Gimnasio gimnasio = new Gimnasio(
+                    resultSet.getLong("id"),
+                    resultSet.getString("nombre"),
+                    resultSet.getString("direccion"),
+                    resultSet.getString("telefono"),
+                    resultSet.getString("email"),
+                    new ArrayList<>(), // listaClientes
+                    new ArrayList<>(), // listaEntrenadores
+                    new ArrayList<>()  // listaReservas
+                );
+                listaGimnasios.add(gimnasio);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener gimnasios: " + e.getMessage());
         } finally {
             try { if (resultSet != null) resultSet.close(); } catch (Exception ignored) {}
             try { if (statement != null) statement.close(); } catch (Exception ignored) {}
             try { if (connection != null) connection.close(); } catch (Exception ignored) {}
         }
-        return listaClientes;
+        return listaGimnasios;
     }
 
     // Recuperar lista de entrenadores
@@ -205,9 +206,9 @@ public class Bbdd {
         try {
             connection = conectar();
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT id, cliente_id, entrenador_id, fecha, hora FROM reserva");
+            resultSet = statement.executeQuery("SELECT id, cliente_id, entrenador_id, fecha, hora, duracion FROM reserva");
             // Recuperar listas de clientes y entrenadores una sola vez
-            ArrayList<Cliente> listaClientes = obtenerClientes();
+            ArrayList<Cliente> listaClientes = Bbdd.obtenerClientes();
             ArrayList<Entrenador> listaEntrenadores = obtenerEntrenadores();
             while (resultSet.next()) {
                 Cliente cliente = null;
@@ -227,10 +228,12 @@ public class Bbdd {
                     }
                 }
                 Reserva reserva = new Reserva(
+                    resultSet.getLong("id"),
                     cliente,
                     entrenador,
                     resultSet.getDate("fecha").toLocalDate(),
-                    resultSet.getTime("hora").toLocalTime()
+                    resultSet.getTime("hora").toLocalTime(),
+                    resultSet.getInt("duracion")
                 );
                 listaReservas.add(reserva);
             }
@@ -242,5 +245,28 @@ public class Bbdd {
             try { if (connection != null) connection.close(); } catch (Exception ignored) {}
         }
         return listaReservas;
+    }
+
+    // Guardar reserva
+    public static String guardarReserva(String fecha, String hora, int clienteId, int entrenadorId, int duracion) {
+        String resultado = "No se pudo guardar la reserva";
+        String sql = "INSERT INTO reserva (fecha, hora, cliente_id, entrenador_id, duracion) VALUES (?, ?, ?, ?, ?)";
+        try (
+            Connection conn = conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setString(1, fecha);
+            stmt.setString(2, hora);
+            stmt.setInt(3, clienteId);
+            stmt.setInt(4, entrenadorId);
+            stmt.setInt(5, duracion);
+            int filas = stmt.executeUpdate();
+            if (filas > 0) {
+                resultado = "Reserva guardada correctamente";
+            }
+        } catch (SQLException e) {
+            resultado = "Error al guardar reserva: " + e.getMessage();
+        }
+        return resultado;
     }
 }

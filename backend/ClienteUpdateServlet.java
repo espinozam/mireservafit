@@ -27,30 +27,18 @@ public class ClienteUpdateServlet extends HttpServlet {
         String id = request.getParameter("id");
         String nombre = request.getParameter("nombre");
         String email = request.getParameter("email");
-        
+
         System.out.println("ID recibido: " + id);
         System.out.println("Nombre recibido: " + nombre);
         System.out.println("Email recibido: " + email);
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "UPDATE cliente SET nombre = ?, email = ? WHERE id = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, nombre);
-                stmt.setString(2, email);
-                stmt.setInt(3, Integer.parseInt(id));
-                int filas = stmt.executeUpdate();
-
-                PrintWriter out = response.getWriter();
-                if (filas > 0) {
-                    out.println("Cliente actualizado correctamente.");
-                } else {
-                    out.println("No se pudo actualizar el cliente.");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.getWriter().println("Error al actualizar cliente: " + e.getMessage());
+        String resultado;
+        try {
+            resultado = Bbdd.actualizarCliente(Integer.parseInt(id), nombre, email);
+        } catch (Exception e) {
+            resultado = "Error al actualizar cliente: " + e.getMessage();
         }
+        response.getWriter().println(resultado);
     }
 
     // Evita error 405 si alguien accede por GET

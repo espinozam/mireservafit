@@ -10,19 +10,21 @@ public class Reserva {
     private Entrenador entrenador;
     private LocalDate fecha;
     private LocalTime hora;
+    private int duracion; // Duración en minutos
 
     // Constructor vacío
     public Reserva() {
         this.setId(contadorId++);
     }
 
-    // Constructor con todos los parámetros
-    public Reserva(Cliente cliente, Entrenador entrenador, LocalDate fecha, LocalTime hora) {
-        this.setId(contadorId++);
+    // Constructor para crear desde BBDD
+    public Reserva(Long id, Cliente cliente, Entrenador entrenador, LocalDate fecha, LocalTime hora, int duracion) {
+        this.setId(id);
         this.setCliente(cliente);
         this.setEntrenador(entrenador);
         this.setFecha(fecha);
         this.setHora(hora);
+        this.setDuracion(duracion);
     }
 
     @Override
@@ -33,6 +35,7 @@ public class Reserva {
                 ", entrenador=" + (this.getEntrenador() != null ? this.getEntrenador().getNombre() : "null") +
                 ", fecha=" + this.getFecha() +
                 ", hora=" + this.getHora() +
+                ", duracion=" + this.getDuracion() +
                 "]";
     }
 
@@ -75,6 +78,15 @@ public class Reserva {
 
     public void setHora(LocalTime hora) {
         this.hora = hora;
+    }
+
+    // Getter y setter para duracion
+    public int getDuracion() {
+        return this.duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
     }
 
 }

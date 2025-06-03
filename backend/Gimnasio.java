@@ -58,6 +58,11 @@ public class Gimnasio {
                 + "]";
     }
 
+    // 
+    public static void cargarClientes(ArrayList<Cliente> listaClientes) {
+        listaClientes.addAll(Bbdd.obtenerClientes());
+    }
+
     // Getters y Setters
     public Long getId() {
         return id;
@@ -158,9 +163,9 @@ public class Gimnasio {
 
     // Método estático para mostrar lista de clientes desde la base de datos
     public static void mostrarClientesBD() {
-        ArrayList<String> listaClientes = Bbdd.descargarClientes();
+        ArrayList<Cliente> listaClientes = Bbdd.obtenerClientes();
         System.out.println("=== Lista de clientes en la base de datos ===");
-        for (String cliente : listaClientes) {
+        for (Cliente cliente : listaClientes) {
             System.out.println(cliente);
         }
     }

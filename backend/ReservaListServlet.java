@@ -5,70 +5,45 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
+import java.util.ArrayList;
 
 @WebServlet("/ReservaListServlet")
 public class ReservaListServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/mireservafit_db";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "";
+    private static String toHtml(ArrayList<Reserva> lista) {
+        String html = "";
+        html += "<table border='1'>";
+        html += "<tr><th>ID</th><th>Fecha</th><th>Hora</th><th>Cliente</th><th>Entrenador</th><th>Duración</th><th>Acciones</th></tr>";
+        for (Reserva r : lista) {
+            html += "<tr>";
+            html += "<td>" + r.getId() + "</td>";
+            html += "<td>" + r.getFecha() + "</td>";
+            html += "<td>" + r.getHora() + "</td>";
+            html += "<td>" + (r.getCliente() != null ? r.getCliente().getNombre() : "") + "</td>";
+            html += "<td>" + (r.getEntrenador() != null ? r.getEntrenador().getNombre() : "") + "</td>";
+            html += "<td>" + r.getDuracion() + "</td>";
+            html += "<td>";
+            html += "<button onclick='editarReserva(" + r.getId() + ")'>Editar</button>";
+            html += "<button onclick='eliminarReserva(" + r.getId() + ")'>Eliminar</button>";
+            html += "</td>";
+            html += "</tr>";
+        }
+        html += "</table>";
+        return html;
+    }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // CORS
+        // Habilitar CORS
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
+        ArrayList<Reserva> listaReservas = Bbdd.obtenerReservas();
+
         response.setContentType("text/html; charset=UTF-8");
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = """
-                SELECT r.id, r.fecha, r.hora, c.nombre AS cliente, e.nombre AS entrenador, r.duracion AS duracion, c.id AS cliente_id, e.id AS entrenador_id
-                FROM reserva r
-                JOIN cliente c ON r.cliente_id = c.id
-                JOIN entrenador e ON r.entrenador_id = e.id
-                ORDER BY r.fecha, r.hora
-                """;
-
-            try (PreparedStatement stmt = conn.prepareStatement(sql);
-                 ResultSet rs = stmt.executeQuery();
-                 PrintWriter out = response.getWriter()) {
-
-                out.println("<table border='1'>");
-                out.println("<tr><th>ID</th><th>Fecha</th><th>Hora</th><th>Cliente</th><th>Entrenador</th><th>Duración</th><th>Acciones</th></tr>");
-
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    String fecha = rs.getString("fecha");
-                    String hora = rs.getString("hora");
-                    String cliente = rs.getString("cliente");
-                    String entrenador = rs.getString("entrenador");
-                    String duracion = rs.getString("duracion");
-                    int clienteId = rs.getInt("cliente_id");
-                    int entrenadorId = rs.getInt("entrenador_id");
-                    
-                    out.printf(
-                            "<tr>" +
-                                "<td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>" +
-                                "<td>" +
-                                    "<button class='btn-editar-reserva' " +
-                                        "data-id='%d' data-fecha='%s' data-hora='%s' data-cliente-id='%d' data-entrenador-id='%d'>Modificar</button> " +
-                                    "<button class='btn-eliminar-reserva' data-id='%d'>Eliminar</button>" +
-                                "</td>" +
-                            "</tr>%n",
-                            id, fecha, hora, cliente, entrenador, duracion,
-                            id, fecha, hora, clienteId, entrenadorId, id
-                        );
-                }
-
-                out.println("</table>");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.getWriter().println("Error al obtener reservas: " + e.getMessage());
-        }
+        response.getWriter().append(toHtml(listaReservas));
+        System.out.println("Lista de reservas solicitada");
     }
 }
