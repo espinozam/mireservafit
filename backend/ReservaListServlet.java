@@ -24,7 +24,13 @@ public class ReservaListServlet extends HttpServlet {
             html += "<td>" + (r.getEntrenador() != null ? r.getEntrenador().getNombre() : "") + "</td>";
             html += "<td>" + r.getDuracion() + "</td>";
             html += "<td>";
-            html += "<button onclick='editarReserva(" + r.getId() + ")'>Editar</button>";
+            html += "<button onclick='editarReserva("
+                + r.getId() + ", "
+                + "\"" + r.getFecha() + "\", "
+                + "\"" + r.getHora() + "\", "
+                + (r.getCliente() != null ? r.getCliente().getId() : "''") + ", "
+                + (r.getEntrenador() != null ? r.getEntrenador().getId() : "''")
+                + ")'>Editar</button>";
             html += "<button onclick='eliminarReserva(" + r.getId() + ")'>Eliminar</button>";
             html += "</td>";
             html += "</tr>";

@@ -269,4 +269,51 @@ public class Bbdd {
         }
         return resultado;
     }
+
+    // Obtener horas ocupadas por un entrenador en una fecha específica
+    public static ArrayList<String> obtenerHorasOcupadas(int entrenadorId, String fecha) {
+        ArrayList<String> ocupadas = new ArrayList<>();
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            con = conectar();
+            st = con.createStatement();
+            String sql = "SELECT hora FROM reserva WHERE fecha='" + fecha + "' AND entrenador_id=" + entrenadorId;
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                ocupadas.add(rs.getString("hora").substring(0, 5));
+            }
+        } catch (Exception e) {
+            System.out.println("Error en obtenerHorasOcupadas: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception ignored) {}
+            try { if (st != null) st.close(); } catch (Exception ignored) {}
+            try { if (con != null) con.close(); } catch (Exception ignored) {}
+        }
+        return ocupadas;
+    }
+
+    public static String[] obtenerRangoDisponibilidad(int entrenadorId, String diaSemana) {
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+        String[] rango = null;
+        try {
+            con = conectar();
+            st = con.createStatement();
+            String sql = "SELECT hora_inicio, hora_fin FROM disponibilidad_entrenador WHERE entrenador_id=" + entrenadorId +
+                    " AND dia_semana='" + diaSemana + "'";
+            rs = st.executeQuery(sql);
+            if (rs.next()) {
+                rango = new String[] {
+                    rs.getString("hora_inicio").substring(0,5),
+                    rs.getString("hora_fin").substring(0,5)
+                };
+            }
+        } catch (Exception e) {
+            System.out.println("Error en obtenerRangoDisponibilidad: " + e.getMessage());
+        }
+        return rango;
+    }
 }

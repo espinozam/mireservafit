@@ -9,26 +9,6 @@ function cargarReservas() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       document.getElementById('listaReservas').innerHTML = xhr.responseText;
-      // Asignar eventos a los botones de editar si existen
-      document.querySelectorAll('.btn-editar-reserva').forEach(btn => {
-        btn.onclick = function () {
-          editarReserva(
-            btn.dataset.id,
-            btn.dataset.fecha,
-            btn.dataset.hora,
-            btn.dataset.clienteId,
-            btn.dataset.entrenadorId
-          );
-        };
-      });
-      // Asignar eventos a los botones de eliminar
-      document.querySelectorAll('.btn-eliminar-reserva').forEach(btn => {
-        btn.onclick = function () {
-          if (confirm("¿Seguro que deseas eliminar esta reserva?")) {
-            eliminarReserva(btn.dataset.id);
-          }
-        };
-      });
     }
   };
 
@@ -95,24 +75,25 @@ function editarReserva(id, fecha, hora, clienteId, entrenadorId) {
   // Cargar selects de clientes y entrenadores
   cargarClientes();
   cargarEntrenadores();
-
+  
   // Asignar fecha, cliente y entrenador después de cargar selects
   setTimeout(() => {
     form.querySelector('input[name="fecha"]').value = fecha;
     form.querySelector('select[name="cliente_id"]').value = clienteId;
     form.querySelector('select[name="entrenador_id"]').value = entrenadorId;
-
-    // Cargar horas disponibles para ese día y entrenador
-    cargarHorasDisponibles();
-
+    
     // Asignar la hora después de cargar las opciones de hora
     setTimeout(() => {
+      cargarHorasDisponibles();
       form.querySelector('select[name="hora"]').value = hora;
-    }, 300);
-  }, 300);
+    }, 100);
+  }, 100);
 }
 
 function eliminarReserva(id) {
+  if (!confirm("¿Estás seguro de que deseas eliminar esta reserva?")) {
+    return;
+  }
   const xhr = new XMLHttpRequest();
   xhr.open("POST", `${baseURL}/ReservaDeleteServlet`, true);
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -139,7 +120,7 @@ function cargarHorasDisponibles() {
 
   if (!fecha || !entrenadorId) return;
 
-  // AJAX clásico para cargar las opciones HTML
+  // Cargar las opciones HTML
   const xhr = new XMLHttpRequest();
   xhr.open("GET", `${baseURL}/HorasDisponiblesServlet?fecha=${fecha}&entrenador_id=${entrenadorId}`, true);
   xhr.onreadystatechange = function () {
