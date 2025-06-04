@@ -85,15 +85,15 @@ INSERT INTO gimnasio (nombre, direccion, telefono, email) VALUES
 
 -- Entrenadores (uno con gimnasio, uno sin gimnasio)
 INSERT INTO entrenador (dni, nombre, apellido1, apellido2, edad, email, contrasena, telefono, especialidad, gimnasio_id) VALUES
-('11111111A', 'Ana', 'Bultrago', '', 35, 'ana@gym.com', 'passanaa1', '555123456', 'Musculación', 1),
-('22222222B', 'Dani', 'Gómez', '', 29, 'dani@gym.com', 'passdanii1', '555987654', 'Yoga', 2),
-('33333333C', 'Entrenador Libre', '', '', 40, 'libre@gym.com', 'passlibre', '555000111', 'Pilates', NULL);
+('11111111A', 'Ana', 'Bultrago', '', 35, 'ana@gym.com', 'Jyjbbjvjj1', '555123456', 'Musculación', 1),
+('22222222B', 'Dani', 'Gómez', '', 29, 'dani@gym.com', 'Gvgyyjgsññ1', '555987654', 'Yoga', 2),
+('33333333C', 'Entrenador Libre', '', '', 40, 'libre@gym.com', 'Crcuunkdtg', '555000111', 'Pilates', NULL);
 
 -- Clientes (uno con gimnasio, uno sin gimnasio)
 INSERT INTO cliente (dni, nombre, apellido1, apellido2, edad, email, contrasena, direccion, telefono, gimnasio_id) VALUES
-('44444444D', 'Juan Pérez', 'Pérez', '', 28, 'juan.perez@email.com', 'passjuan', 'Calle Uno', '555111222', 1),
-('55555555E', 'María López', 'López', '', 31, 'maria.lopez@email.com', 'passmaria', 'Calle Dos', '555333444', 2),
-('66666666F', 'Cliente Independiente', '', '', 22, 'indep@correo.com', 'passindep', 'Calle Libre', '555999888', NULL);
+('44444444D', 'Juan Pérez', 'Pérez', '', 28, 'juan.perez@email.com', 'Ncnffvhnz', 'Calle Uno', '555111222', 1),
+('55555555E', 'María López', 'López', '', 31, 'maria.lopez@email.com', 'Ncnffyneun', 'Calle Dos', '555333444', 2),
+('66666666F', 'Cliente Independiente', '', '', 22, 'indep@correo.com', 'Rhrkkzeuvh', 'Calle Libre', '555999888', NULL);
 
 -- Disponibilidad de entrenadores
 INSERT INTO disponibilidad_entrenador (entrenador_id, dia_semana, hora_inicio, hora_fin) VALUES
