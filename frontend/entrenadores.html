@@ -2,26 +2,29 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Gestor de Clientes</title>
+  <title>Gestor de Entrenador</title>
 </head>
 <body>
 
   <h1>Gestión de Entrenadores</h1>
 
-  <!-- Formulario oculto para agregar entrenador -->
-  <form id="formEntrenador" style="display:none;" onsubmit="agregarEntrenador(event)">
-    <input type="text" name="nombre" placeholder="Nombre" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <button type="submit">Agregar Entrenador</button>
-  </form>
+  	<!-- Formulario oculto para agregar entrenador -->
+  	<form id="formEntrenador" style="display:none;" onsubmit="agregarEntrenador(event)">
+    	<input type="text" name="nombre" placeholder="Nombre" required />
+    	<input type="text" name="especialidad" placeholder="Especialidad" required />
+    	<button type="submit">Agregar Entrenador</button>
+  	</form>
 
-  <!-- Formulario para editar entrenador -->
-<form id="formEditarEntrenador" style="display:none;" onsubmit="editarEntrenador(event)">
-  <input type="hidden" name="id" id="editarIdEntrenador" />
-  <input type="text" name="nombre" id="editarNombreEntrenador" placeholder="Nombre" required />
-  <input type="email" name="email" id="editarEmailEntrenador" placeholder="Email" required />
-  <button type="submit">Guardar Cambios</button>
+ 	 <!-- Formulario para editar entrenador -->
+	<form id="formEditarEntrenador" style="display:none;" onsubmit="guardarEdicionEntrenador(event)">
+  		<input type="hidden" name="id" id="editarIdEntrenador" />
+  		<input type="text" name="nombre" id="editarNombreEntrenador" placeholder="Nombre" required />
+  		<input type="text" name="especialidad" id="editarEspecialidadEntrenador" placeholder="Especialidad" required />
+  		<button type="submit">Guardar Cambios</button>
+  	</form>
     
-<script src="js/entrenadores.js"></script>
+	<div id= "listaEntrenadores"></div>
+
+	<script src="js/entrenadores.js"></script>
 </body>
 </html>
