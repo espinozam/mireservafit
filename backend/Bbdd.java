@@ -316,4 +316,40 @@ public class Bbdd {
         }
         return rango;
     }
+
+    public static boolean validarUsuario(String tipo, String usuario, String password) {
+        boolean esValido = false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = conectar();
+            String tabla = "cliente";
+            if ("entrenador".equalsIgnoreCase(tipo)) {
+                tabla = "entrenador";
+            }
+            String sql = "SELECT * FROM " + tabla + " WHERE email = ? AND contrasena = ?";
+            System.out.println(sql); // Imprimir la consulta SQL para depuración
+            ps = con.prepareStatement(sql);
+            ps.setString(1, usuario);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                esValido = true;
+                // Imprimir email y contraseña encontrados
+                System.out.println("Usuario encontrado:");
+                System.out.println("Email: " + rs.getString("email"));
+                System.out.println("Contraseña: " + rs.getString("contrasena"));
+            } else {
+                System.out.println("No se encontró usuario con email y contraseña proporcionados.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error en validarUsuario: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception ignored) {}
+            try { if (ps != null) ps.close(); } catch (Exception ignored) {}
+            try { if (con != null) con.close(); } catch (Exception ignored) {}
+        }
+        return esValido;
+    }
 }
