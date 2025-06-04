@@ -2,46 +2,49 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Gestor de Clientes</title>
+  <title>MiReservaFit - Inicio</title>
 </head>
 <body>
-  <h1>Gestión de Clientes</h1>
-
-  <!-- Formulario oculto para agregar cliente -->
-  <form id="formCliente" style="display:none;" onsubmit="agregarCliente(event)">
-    <input type="text" name="nombre" placeholder="Nombre" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <button type="submit">Agregar Cliente</button>
-  </form>
-  
-  <!-- Formulario para editar cliente -->
-  <form id="formEditarCliente" style="display:none;" onsubmit="guardarEdicionCliente(event)">
-    <input type="hidden" name="id" id="editarId" />
-    <input type="text" name="nombre" id="editarNombre" placeholder="Nombre" required />
-    <input type="email" name="email" id="editarEmail" placeholder="Email" required />
-    <button type="submit">Guardar Cambios</button>
-  </form>
-
-  <!-- Aquí se carga la tabla de clientes -->
-  <div id="listaClientes"></div>
-  
-  <script src="js/cliente.js"></script>
-
-  <h1>Gestión de Entrenadores</h1>
-
-  <!-- Formulario oculto para agregar entrenador -->
-  <form id="formEntrenador" style="display:none;" onsubmit="agregarEntrenador(event)">
-    <input type="text" name="nombre" placeholder="Nombre" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <button type="submit">Agregar Entrenador</button>
-  </form>
-
-  <!-- Formulario para editar entrenador -->
-<form id="formEditarEntrenador" style="display:none;" onsubmit="editarEntrenador(event)">
-  <input type="hidden" name="id" id="editarIdEntrenador" />
-  <input type="text" name="nombre" id="editarNombreEntrenador" placeholder="Nombre" required />
-  <input type="email" name="email" id="editarEmailEntrenador" placeholder="Email" required />
-  <button type="submit">Guardar Cambios</button>
-    
+  <h2>Bienvenido a MiReservaFit</h2>
+  <table>
+    <tr>
+      <td valign="top">
+        <h3>Registro</h3>
+        <form id="registroForm" onsubmit="return registrarUsuario()">
+          <label>
+            <input type="radio" name="tipoRegistro" value="cliente" checked> Cliente
+          </label>
+          <label>
+            <input type="radio" name="tipoRegistro" value="entrenador"> Entrenador
+          </label>
+          <br><br>
+          <input type="text" id="nuevoUsuario" placeholder="Usuario o email" required>
+          <br><br>
+          <input type="password" id="nuevoPassword" placeholder="Contraseña" required>
+          <br><br>
+          <button type="submit">Registrarse</button>
+        </form>
+      </td>
+      <td style="width:40px;"></td>
+      <td valign="top">
+        <h3>Iniciar sesión</h3>
+        <form id="loginForm" onsubmit="return loginUsuario()">
+          <label>
+            <input type="radio" name="tipoUsuario" value="cliente" checked> Cliente
+          </label>
+          <label>
+            <input type="radio" name="tipoUsuario" value="entrenador"> Entrenador
+          </label>
+          <br><br>
+          <input type="text" id="usuario" placeholder="Usuario o email" required>
+          <br><br>
+          <input type="password" id="password" placeholder="Contraseña" required>
+          <br><br>
+          <button type="submit">Entrar</button>
+        </form>
+      </td>
+    </tr>
+  </table>
+  <script src="js/index.js"></script>
 </body>
 </html>

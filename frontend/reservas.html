@@ -6,20 +6,32 @@
 </head>
 <body>
   <h1>Gestión de Reservas</h1>
-
+  
   <button onclick="mostrarFormularioReserva()">Añadir Reserva</button>
 
   <form id="formReserva" style="display:none;" onsubmit="agregarReserva(event)">
-    <input type="date" name="fecha" required />
-    <input type="time" name="hora" required />
-    <input type="number" name="cliente_id" placeholder="ID Cliente" required />
-    <input type="number" name="entrenador_id" placeholder="ID Entrenador" required />
+    <input type="date" name="fecha" id="fecha" required />
+    <select name="hora" id="hora" required>
+      <option value="">Seleccione hora disponible</option>
+      <!-- Opciones llenadas dinámicamente -->
+    </select>
+    <select name="cliente_id" id="cliente_id" required>
+      <option value="">Seleccione cliente</option>
+      <!-- Opciones llenadas dinámicamente -->
+    </select>
+    <select name="entrenador_id" id="entrenador_id" required>
+      <option value="">Seleccione entrenador</option>
+      <!-- Opciones llenadas dinámicamente -->
+    </select>
     <button type="submit">Guardar Reserva</button>
   </form>
 
   <h2>Lista de Reservas</h2>
   <div id="listaReservas"></div>
 
+  <script>
+
+  </script>
   <script src="js/reservas.js"></script>
 </body>
 </html>

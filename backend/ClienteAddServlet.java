@@ -11,11 +11,8 @@ import java.sql.*;
 public class ClienteAddServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/mireservafit_db";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = ""; // Actualiza si tienes contraseña
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Habilitar CORS
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -25,36 +22,24 @@ public class ClienteAddServlet extends HttpServlet {
 
         String nombre = request.getParameter("nombre");
         String email = request.getParameter("email");
-
-        System.out.println("Nombre recibido: " + nombre);
-        System.out.println("Email recibido: " + email);
+        String telefono = request.getParameter("telefono");
+        String gimnasioIdStr = request.getParameter("gimnasio_id");
 
         if (nombre == null || email == null || nombre.isEmpty() || email.isEmpty()) {
             response.getWriter().println("Nombre y email son obligatorios.");
             return;
         }
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "INSERT INTO cliente (nombre, email, gimnasio_id) VALUES (?, ?, 1)";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, nombre);
-                stmt.setString(2, email);
-                int filas = stmt.executeUpdate();
-
-                PrintWriter out = response.getWriter();
-                if (filas > 0) {
-                    out.println("Cliente agregado correctamente.");
-                } else {
-                    out.println("No se pudo agregar el cliente.");
-                }
+        int gimnasioId = 1; // valor por defecto
+        try {
+            if (gimnasioIdStr != null && !gimnasioIdStr.isEmpty()) {
+                gimnasioId = Integer.parseInt(gimnasioIdStr);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.getWriter().println("Error SQL: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            // Si no es válido, se mantiene el valor por defecto
         }
-    }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "Este endpoint solo acepta POST.");
+        Bbdd.guardarCliente(nombre, email, telefono, gimnasioId);
     }
+    
 }
