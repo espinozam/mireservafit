@@ -25,7 +25,8 @@ public class EntrenadorAddServlet extends HttpServlet {
 
         String nombre = request.getParameter("nombre");
         String especialidad = request.getParameter("especialidad");
-
+        
+        
         System.out.println("Nombre recibido: " + nombre);
         System.out.println("Especialidad recibida: " + especialidad);
 
