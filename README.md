@@ -25,26 +25,25 @@ Esta aplicación web permite a clientes y entrenadores gestionar reservas de ses
 
 ```
 mireservafit/
-├── backend/                        # Lógica del servidor en Java (Servlets y modelos)
+├── backend/
 │   ├── Bbdd.java                   # Clase para la conexión con la base de datos
 │   ├── Reserva*.java               # Servlets para operaciones CRUD de reservas
-│   ├── Cliente*.java               # Servlets para operaciones con clientes
-│   ├── Entrenador*.java            # Servlets para operaciones con entrenadores
-│   └── ...                         # Otros modelos y controladores
+│   ├── Cliente*.java               # Servlets para operaciones CRUD de clientes
+│   ├── Entrenador*.java            # Servlets para operaciones CRUD de entrenadores
+│   └── ...
 │
-├── frontend/                       # Interfaz de usuario
-│   ├── index.html                  # Página principal
+├── frontend/
+│   ├── index.html                  # Página principal (login)
 │   ├── cliente.html                # Área privada del cliente
 │   ├── entrenadorArea.html         # Área privada del entrenador
-│   ├── entrenadores.html           # Página pública de entrenadores disponibles
 │   ├── admin.html                  # Área de administración del sistema
-│   ├── js/                         # Scripts JavaScript del frontend
+│   ├── js/
 │   │   ├── clienteArea.js          # Lógica para la interacción del cliente con sus reservas
 │   │   ├── entrenadorArea.js       # Gestión de reservas del entrenador
-│   │   ├── reservas.js             # Funciones comunes para crear, actualizar y eliminar reservas
-│   │   ├── entrenadores.js         # Carga y visualización de entrenadores en la página pública
-│   │   └── config.js               # Configuración general, como URLs de la API
-│   └── ...                         # Otros recursos (CSS, imágenes, etc.)
+│   │   ├── reservas.js             # Funciones para crear, actualizar y eliminar reservas
+│   │   ├── entrenadores.js         # Carga y visualización de entrenadores
+│   │   └── config.js               # Configuración general, como URL al servidor Tomcat
+│   └── ...
 │
 ├── database/                       # Scripts de base de datos
 │   └── schema.sql                  # Script SQL para crear las tablas necesarias
