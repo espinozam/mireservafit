@@ -4,26 +4,40 @@ Aplicación web para gestionar reservas de sesiones de entrenamiento en un gimna
 
 ## Descripción
 
-mireservafit es una aplicación web que permite a clientes y entrenadores gestionar reservas de sesiones, consultar disponibilidad, y administrar usuarios y gimnasios. Incluye áreas diferenciadas para clientes, entrenadores y administración.
+Esta aplicación web permite a clientes y entrenadores gestionar reservas de sesiones, consultar disponibilidad, y administrar usuarios. Incluye áreas para clientes, entrenadores y administración.
 
 ---
 
 ## Características principales
 
+- **Panel de administración** Gestión de entrenadores, clientes y reservas.
 - **Registro y login** para clientes y entrenadores.
 - **Gestión de reservas**: crear, editar, eliminar y consultar reservas.
 - **Panel de cliente**: ver y gestionar reservas propias.
 - **Panel de entrenador**: ver y gestionar reservas asignadas.
-- **Gestión de entrenadores y clientes** (solo administración).
 - **Gestión de gimnasios** y disponibilidad de entrenadores.
-- **Frontend sin frameworks CSS** (HTML y JavaScript puro).
+- **Frontend** Usando HTML y JavaScript puro.
 - **Backend en Java con Servlets** y conexión a base de datos MySQL.
 
 ---
 
 ## Estructura del proyecto
 
-mireservafit/ │ ├── backend/ │ ├── Bbdd.java │ ├── ReservaListServlet.java │ ├── ReservaClienteServlet.java │ ├── ReservaEntrenadorServlet.java │ ├── ReservaAddServlet.java │ ├── ReservaUpdateServlet.java │ ├── ReservaDeleteServlet.java │ ├── EntrenadorListServlet.java │ ├── EntrenadorIdServlet.java │ ├── ClienteListServlet.java │ └── ...otros servlets y modelos │ ├── frontend/ │ ├── index.html │ ├── cliente.html │ ├── entrenadorArea.html │ ├── entrenadores.html │ ├── js/ │ │ ├── clienteArea.js │ │ ├── entrenadorArea.js │ │ ├── reservas.js │ │ ├── entrenadores.js │ │ └── config.js │ └── ...otros recursos │ ├── database/ │ └── schema.sql │ └──
+<pre> ```mireservafit/ │ ├── backend/ │ ├── Bbdd.java │ ├── ReservaListServlet.java │ ├── ReservaClienteServlet.java │ ├── ReservaEntrenadorServlet.java │ ├── ReservaAddServlet.java │ ├── ReservaUpdateServlet.java │ ├── ReservaDeleteServlet.java │ ├── EntrenadorListServlet.java │ ├── EntrenadorIdServlet.java │ ├── ClienteListServlet.java │ └── ...otros servlets y modelos │ ├── frontend/ │ ├── index.html │ ├── cliente.html │ ├── entrenadorArea.html │ ├── entrenadores.html │ ├── js/ │ │ ├── clienteArea.js │ │ ├── entrenadorArea.js │ │ ├── reservas.js │ │ ├── entrenadores.js │ │ └── config.js │ └── ...otros recursos │ ├── database/ │ └── schema.sql │ └──  ``` </pre>
+
+---
+
+## Requisitos
+
+## Requisitos
+
+- **Java JDK 17** o superior
+- **Eclipse IDE for Enterprise Java and Web Developers** (o cualquier IDE compatible con proyectos Jakarta EE)
+- **Apache Tomcat v10.1** (o compatible con Jakarta EE 10)
+- **MySQL Server** (recomendado MySQL 8 o superior)
+- **mysql-connector-j-9.2.0.jar** (añadir al classpath del proyecto)
+- **servlet-api.jar** (incluido en la carpeta `lib` de tu instalación de Tomcat `C:\apache-tomcat-10.1.28\lib`)
+- Navegador web moderno (Chrome, Firefox, Edge, etc.)
 
 ---
 
@@ -38,10 +52,14 @@ git clone https://github.com/tuusuario/mireservafit.git
 - Ejecuta el script `database/schema.sql` para crear las tablas y datos de prueba.
 
 3. **Configura la conexión en `Bbdd.java`**  
-- Ajusta los parámetros de conexión (`usuario`, `contraseña`, `url`) según tu entorno.
+- Ajusta los parámetros de conexión (`usuario`, `contraseña`, `url`).
 
 4. **Despliega el backend**  
 - Compila los servlets y despliega en un servidor compatible con Jakarta EE (Tomcat recomendado).
+> **Nota:**  
+> Para compilar y ejecutar los archivos `.java` del backend, primero debes crear manualmente las clases y servlets en tu proyecto Java Web usando un IDE como **Eclipse IDE for Enterprise Java and Web Developers**.  
+> Luego, copia y pega el código proporcionado en los archivos `.java` correspondientes dentro de tu estructura de proyecto en Eclipse.  
+> Esto es necesario porque Eclipse gestiona los paquetes, rutas y configuración del proyecto, y no es suficiente con solo copiar los archivos al sistema de archivos.
 
 5. **Abre el frontend**  
 - Accede a los archivos HTML desde un navegador o configúralos en un servidor web.
@@ -123,4 +141,8 @@ Devuelve el id de un entrenador a partir de su email.
 Desarrollado por Edwin Espinoza Mercado.  
 Colaboración de Juan Diaz ([Lefty616](https://github.com/Lefty616)).  
 Con ayuda de ChatGPT y Microsoft Copilot.
+
+
+
+
 
