@@ -67,7 +67,9 @@ mireservafit/
 
 1. **Clona el repositorio**
 
+```sh
 git clone https://github.com/tuusuario/mireservafit.git
+```
 
 2. **Configura la base de datos**  
 - Crea una base de datos MySQL.
