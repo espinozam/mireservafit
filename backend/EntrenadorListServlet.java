@@ -51,11 +51,11 @@ public class EntrenadorListServlet extends HttpServlet {
                     out.println("<td>" + nombre + "</td>");
                     out.println("<td>" + especialidad + "</td>");
                     out.println("<td>");
-out.println("<button onclick='editarEntrenador(" +
-    "\"" + id + "\", " +
-    "\"" + nombre + "\", " +
-    "\"" + especialidad + "\", " +
-    ")'>Editar</button>");
+                    out.println("<button onclick='editarEntrenador(" +
+                        "\"" + id + "\", " +
+                        "\"" + nombre + "\", " +
+                        "\"" + especialidad + "\", " +
+                        ")'>Editar</button>");
 
                     out.println("<button onclick='eliminarEntrenador(" + id + ")'>Eliminar</button>");
                     out.println("</td>");

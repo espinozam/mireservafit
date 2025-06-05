@@ -1,5 +1,3 @@
-const baseURL = 'http://localhost:8080/MiReservaFit';
-
 window.onload = cargarReservas;
 
 function cargarReservas() {
@@ -8,7 +6,10 @@ function cargarReservas() {
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
-      document.getElementById('listaReservas').innerHTML = xhr.responseText;
+      const contenedor = document.getElementById('listaReservas');
+      if (contenedor) {
+        contenedor.innerHTML = xhr.responseText;
+      }
     }
   };
 
@@ -36,7 +37,7 @@ function agregarReserva(event) {
     url = `${baseURL}/ReservaUpdateServlet`;
     params += `&id=${encodeURIComponent(reservaId)}`;
   }
-
+  
   xhr.open("POST", url, true);
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
@@ -53,7 +54,7 @@ function agregarReserva(event) {
         ) {
           cargarReservas();
           form.reset();
-          form.style.display = 'none';
+          //form.style.display = 'none';
           form.dataset.editing = "";
         }
       } else {

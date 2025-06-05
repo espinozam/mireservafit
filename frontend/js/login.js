@@ -17,7 +17,7 @@ function loginUsuario() {
           localStorage.setItem("usuarioEmail", usuario);
           localStorage.setItem("tipoUsuario", tipo);
           
-          window.location.href = tipo === 'cliente' ? 'cliente.html' : 'entrenador.html';
+          window.location.href = tipo === 'cliente' ? 'clienteArea.html' : 'entrenadorArea.html';
         } else {
           alert("Usuario o contraseña incorrectos. Respuesta: " + xhr.responseText.trim());
         }

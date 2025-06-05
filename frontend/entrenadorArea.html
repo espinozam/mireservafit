@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Entrenador - MiReservaFit</title>
+</head>
+<body>
+  <h2>Panel de Entrenador</h2>
+  <div id="infoEntrenador">
+    <!-- Aquí puedes mostrar datos del entrenador logueado -->
+    <p>Bienvenido, [Nombre del Entrenador]</p>
+    <button id="cerrarSesionBtn">Cerrar sesión</button>
+  </div>
+  
+  <h4>Nueva reserva</h4>
+
+  <form id="formReserva" style="display:block;" onsubmit="agregarReserva(event)">
+    <input type="date" name="fecha" id="fecha" required />
+    <select name="hora" id="hora" required>
+      <option value="">Seleccione hora disponible</option>
+      <!-- Opciones llenadas dinámicamente -->
+    </select>
+    <select name="cliente_id" id="cliente_id" required>
+      <option value="">Seleccione cliente</option>
+      <!-- Opciones llenadas dinámicamente -->
+    </select>
+    <select name="entrenador_id" id="entrenador_id" style="display:none;">
+      <!-- La opción se llenará dinámicamente con el id del entrenador logueado -->
+    </select>
+    <button type="submit">Guardar Reserva</button>
+  </form>
+  <div>
+    <h4>Reservas Asignadas</h4>
+    <div id="reservasEntrenador">
+      <!-- Aquí se mostrarán las reservas asignadas al entrenador -->
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/reservas.js"></script>
+  <script src="js/entrenadorArea.js"></script>
+</body>
+</html>

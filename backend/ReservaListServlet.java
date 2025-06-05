@@ -22,7 +22,7 @@ public class ReservaListServlet extends HttpServlet {
             html += "<td>" + r.getHora() + "</td>";
             html += "<td>" + (r.getCliente() != null ? r.getCliente().getNombre() : "") + "</td>";
             html += "<td>" + (r.getEntrenador() != null ? r.getEntrenador().getNombre() : "") + "</td>";
-            html += "<td>" + r.getDuracion() + "</td>";
+            html += "<td>" + r.getDuracion() + " min</td>";
             html += "<td>";
             html += "<button onclick='editarReserva("
                 + r.getId() + ", "
@@ -46,7 +46,20 @@ public class ReservaListServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
+        String emailEntrenador = request.getParameter("emailEntrenador");
+
         ArrayList<Reserva> listaReservas = Bbdd.obtenerReservas();
+
+        // Si se pasa el parámetro emailEntrenador, filtrar la lista
+        if (emailEntrenador != null && !emailEntrenador.isEmpty()) {
+            ArrayList<Reserva> filtradas = new ArrayList<>();
+            for (Reserva r : listaReservas) {
+                if (r.getEntrenador() != null && r.getEntrenador().getEmail().equalsIgnoreCase(emailEntrenador)) {
+                    filtradas.add(r);
+                }
+            }
+            listaReservas = filtradas;
+        }
 
         response.setContentType("text/html; charset=UTF-8");
         response.getWriter().append(toHtml(listaReservas));
