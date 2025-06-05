@@ -68,7 +68,7 @@ mireservafit/
 1. **Clona el repositorio**
 
 ```sh
-git clone https://github.com/tuusuario/mireservafit.git
+git clone https://github.com/espinozam/mireservafit
 ```
 
 2. **Configura la base de datos**  
@@ -164,9 +164,4 @@ Devuelve el id de un entrenador a partir de su email.
 
 Desarrollado por Edwin Espinoza Mercado.  
 Colaboración de Juan Diaz ([Lefty616](https://github.com/Lefty616)).
-Con ayuda de ChatGPT y Microsoft Copilot.
-
-
-
-
-
+ChatGPT para soporte y generación de ideas.
