@@ -23,11 +23,32 @@ Esta aplicación web permite a clientes y entrenadores gestionar reservas de ses
 
 ## Estructura del proyecto
 
-<pre> ```mireservafit/ │ ├── backend/ │ ├── Bbdd.java │ ├── ReservaListServlet.java │ ├── ReservaClienteServlet.java │ ├── ReservaEntrenadorServlet.java │ ├── ReservaAddServlet.java │ ├── ReservaUpdateServlet.java │ ├── ReservaDeleteServlet.java │ ├── EntrenadorListServlet.java │ ├── EntrenadorIdServlet.java │ ├── ClienteListServlet.java │ └── ...otros servlets y modelos │ ├── frontend/ │ ├── index.html │ ├── cliente.html │ ├── entrenadorArea.html │ ├── entrenadores.html │ ├── js/ │ │ ├── clienteArea.js │ │ ├── entrenadorArea.js │ │ ├── reservas.js │ │ ├── entrenadores.js │ │ └── config.js │ └── ...otros recursos │ ├── database/ │ └── schema.sql │ └──  ``` </pre>
+mireservafit/
+├── backend/                        # Lógica del servidor en Java (Servlets y modelos)
+│   ├── Bbdd.java                   # Clase para la conexión con la base de datos
+│   ├── Reserva*.java               # Servlets para operaciones CRUD de reservas
+│   ├── Cliente*.java               # Servlets para operaciones con clientes
+│   ├── Entrenador*.java            # Servlets para operaciones con entrenadores
+│   └── ...                         # Otros modelos y controladores
+│
+├── frontend/                       # Interfaz de usuario
+│   ├── index.html                  # Página principal
+│   ├── cliente.html                # Área privada del cliente
+│   ├── entrenadorArea.html         # Área privada del entrenador
+│   ├── entrenadores.html           # Página pública de entrenadores disponibles
+│   ├── admin.html                  # Área de administración del sistema
+│   ├── js/                         # Scripts JavaScript del frontend
+│   │   ├── clienteArea.js          # Lógica para la interacción del cliente con sus reservas
+│   │   ├── entrenadorArea.js       # Gestión de reservas del entrenador
+│   │   ├── reservas.js             # Funciones comunes para crear, actualizar y eliminar reservas
+│   │   ├── entrenadores.js         # Carga y visualización de entrenadores en la página pública
+│   │   └── config.js               # Configuración general, como URLs de la API
+│   └── ...                         # Otros recursos (CSS, imágenes, etc.)
+│
+├── database/                       # Scripts de base de datos
+│   └── schema.sql                  # Script SQL para crear las tablas necesarias
 
 ---
-
-## Requisitos
 
 ## Requisitos
 
@@ -139,7 +160,7 @@ Devuelve el id de un entrenador a partir de su email.
 ## Créditos
 
 Desarrollado por Edwin Espinoza Mercado.  
-Colaboración de Juan Diaz ([Lefty616](https://github.com/Lefty616)).  
+Colaboración de Juan Diaz ([Lefty616](https://github.com/Lefty616)).
 Con ayuda de ChatGPT y Microsoft Copilot.
 
 
