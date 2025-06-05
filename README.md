@@ -23,6 +23,7 @@ Esta aplicación web permite a clientes y entrenadores gestionar reservas de ses
 
 ## Estructura del proyecto
 
+```
 mireservafit/
 ├── backend/                        # Lógica del servidor en Java (Servlets y modelos)
 │   ├── Bbdd.java                   # Clase para la conexión con la base de datos
@@ -47,6 +48,7 @@ mireservafit/
 │
 ├── database/                       # Scripts de base de datos
 │   └── schema.sql                  # Script SQL para crear las tablas necesarias
+```
 
 ---
 
